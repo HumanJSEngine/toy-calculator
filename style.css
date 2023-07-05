@@ -90,6 +90,36 @@ button:focus {
   background-color: rgb(29, 217, 217);
 }
 
+.card h1, .card h2, .card h3 {
+  color:#fff;
+}
+
+.card :where(h1, h2, h3) {
+  color:#fff;
+}
+
+.card:focus,
+.card:hover,
+.card:active {
+  background: blue;
+}
+
+.card:where(:focus, :hover, :active) {
+  background: blue;
+}
+
+.container {
+  overflow: auto;
+  display: flex;
+  scroll-snap-type: x mandatory;
+}
+
+.container .item {
+  flex-shrink: 10px;
+  scroll-snap-align: start;
+}
+
+
 @media screen and (max-width:600px) {
   .calculator {
     width: 95%;
