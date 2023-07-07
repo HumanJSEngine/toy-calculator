@@ -4,22 +4,81 @@ const inputBtns = document.querySelectorAll('button');
 
 const clearBtn = document.getElementById('clear-btn');
 
+const calculate = {
+    '/' : (firstNumber, secondNumber) => firstNumber / secondNumber,
+    '*' : (firstNumber, secondNumber) => firstNumber * secondNumber,
+    '+' : (firstNumber, secondNumber) => firstNumber + secondNumber,
+    '-' : (firstNumber, secondNumber) => firstNumber - secondNumber,
+    '=' : (firstNumber, secondNumber) => secondNumber,
+};
+
+
+let firstValue = 0;
+let operatorValue = '';
+let awaitingNextValue = false;
+
 function sendNumberValue(number) {
-    const displayValue = calculatorDisplay.textContent;
-    calculatorDisplay.textContent = displayValue === '0' ? number : displayValue + number;
+    
+    if(awaitingNextValue === true) {
+        calculatorDisplay.textContent = number;
+        awaitingNextValue = false;
+    }else {
+        const displayValue = calculatorDisplay.textContent;
+        calculatorDisplay.textContent = displayValue === '0' ? number : displayValue + number;
+    }
 
 }
 
-console.log(inputBtns);
+function addDecimal() {
+    if(awaitingNextValue) return;
+    if(!calculatorDisplay.textContent.includes('.')){
+        calculatorDisplay.textContent = `${calculatorDisplay.textContent}.`;
+    }
+}
+
+
+function useOperator(operator) {
+    const currentValue = Number(calculatorDisplay.textContent);
+
+
+    if(operatorValue && awaitingNextValue) {
+        operatorValue = operator;
+        return;
+    }
+
+    //assgin first value
+    if(!firstValue) {
+        firstValue = currentValue;
+    }else {
+        console.log(firstValue, operatorValue, currentValue);
+        const calculation = calculate[operatorValue](firstValue, currentValue);
+        calculatorDisplay.textContent = calculation;
+        firstValue = calculation;
+    }
+
+    // 다음 밸류
+    awaitingNextValue = true;
+    operatorValue = operator;
+
+}
+
+
+function resetAll() {
+    firstValue = 0;
+    operatorValue = '';
+    awaitingNextValue = false;
+    calculatorDisplay.textContent = '0';
+}
 
 
 inputBtns.forEach((inputBtn) => {
     if(inputBtn.classList.length === 0) {
         inputBtn.addEventListener('click', () => sendNumberValue(inputBtn.value));
     }else if(inputBtn.classList.contains('operator')) {
-        inputBtn.addEventListener('click', () => sendNumberValue(inputBtn.value));
+        inputBtn.addEventListener('click', () => useOperator(inputBtn.value));
     }else if(inputBtn.classList.contains('decimal')) {
-        inputBtn.addEventListener('click', () => sendNumberValue(inputBtn.value));
+        inputBtn.addEventListener('click', () => addDecimal());
     }
 
 });
+clearBtn.addEventListener('click', resetAll);

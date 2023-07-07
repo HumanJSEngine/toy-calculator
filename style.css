@@ -28,6 +28,7 @@ body {
   align-items: center;
   justify-content: flex-end;
   border-radius: 10px 10px 0 0;
+  height:100px;
 }
 
 .calculator-display > h1 {
@@ -61,7 +62,7 @@ button:hover {
 }
 
 button:active {
-  transform: translateY(10px);
+  transform: translateY(5px);
 }
 
 button:focus {
